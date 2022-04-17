@@ -12,12 +12,13 @@ import java.time.Instant;
 public class AuthService {
 
     @Autowired
-    private PasswordEncoder passwordEncoder
+    private PasswordEncoder passwordEncoder;
+
     public void signup(RegisterRequest registerRequest){
         User user = new User();
         user.setUsername(registerRequest.getUsername());
         user.setEmail(registerRequest.getEmail());
-        user.setPassword(registerRequest.getPassword());
+        user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         user.setCreatedDate(Instant.now());
         user.setEnabled(false);
     }
