@@ -1,6 +1,7 @@
 package com.bizarreDomain.RedditClone.service;
 
 import com.bizarreDomain.RedditClone.dto.RegisterRequest;
+import com.bizarreDomain.RedditClone.model.NotificationEmail;
 import com.bizarreDomain.RedditClone.model.User;
 import com.bizarreDomain.RedditClone.model.VerificationToken;
 import com.bizarreDomain.RedditClone.repository.UserRepository;
@@ -20,6 +21,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final VerificationTokenRepository verificationTokenRepository;
+    private final MailService mailService;
 
     @Transactional
     public void signup(RegisterRequest registerRequest){
@@ -33,6 +35,10 @@ public class AuthService {
         userRepository.save(user);
 
         String token = generateVerificationToken(user);
+        mailService.sendMail(new NotificationEmail("Please Activate your Account.",
+                user.getEmail(), "Thank you for signing up to Spring Reddit, " +
+                "please click on the below url to activate your account: " +
+                "http://localhost:8080/api/auth/accountVerification/" + token));
     }
 
     // persisting token against user in DB so that later we can perform token look up in DB and enable the specific user to which token belongs
