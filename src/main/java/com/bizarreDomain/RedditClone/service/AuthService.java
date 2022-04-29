@@ -1,5 +1,7 @@
 package com.bizarreDomain.RedditClone.service;
 
+import com.bizarreDomain.RedditClone.dto.AuthenticationResponse;
+import com.bizarreDomain.RedditClone.dto.LoginRequest;
 import com.bizarreDomain.RedditClone.dto.RegisterRequest;
 import com.bizarreDomain.RedditClone.exceptions.SpringRedditException;
 import com.bizarreDomain.RedditClone.model.NotificationEmail;
@@ -7,7 +9,12 @@ import com.bizarreDomain.RedditClone.model.User;
 import com.bizarreDomain.RedditClone.model.VerificationToken;
 import com.bizarreDomain.RedditClone.repository.UserRepository;
 import com.bizarreDomain.RedditClone.repository.VerificationTokenRepository;
+import com.bizarreDomain.RedditClone.security.JWTProvider;
 import lombok.AllArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +31,8 @@ public class AuthService {
     private final UserRepository userRepository;
     private final VerificationTokenRepository verificationTokenRepository;
     private final MailService mailService;
+    private final AuthenticationManager authenticationManager;
+    private final JWTProvider jwtProvider;
 
     @Transactional
     public void signup(RegisterRequest registerRequest){
@@ -66,5 +75,17 @@ public class AuthService {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new SpringRedditException("User not found with name - " + username));
         user.setEnabled(true);
         userRepository.save(user);
+    }
+
+    // authenticating using UsernamePasswordAuthenticationToken (JWT Authentication)
+    public AuthenticationResponse login(LoginRequest loginRequest) {
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+        // storing Authentication object inside SecurityContextHolder
+        // to check whether the user is logged in or not, we will check Authentication object is present in our SecurityContext
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        // generating JWT token and send the token to client
+        String token = jwtProvider.generateToken(authentication);
+        return new AuthenticationResponse(token, loginRequest.getUsername());
+
     }
 }
