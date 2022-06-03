@@ -36,6 +36,10 @@ public class AuthService {
 
     @Transactional
     public void signup(RegisterRequest registerRequest){
+        if(checkIfUserAlreadyExists(registerRequest)){
+            throw new SpringRedditException("User with the email/username already exists. Please try with different username/email.");
+        }
+
         User user = new User();
         user.setUsername(registerRequest.getUsername());
         user.setEmail(registerRequest.getEmail());
@@ -61,6 +65,10 @@ public class AuthService {
 
         verificationTokenRepository.save(verificationToken);
         return token;
+    }
+
+    private boolean checkIfUserAlreadyExists(RegisterRequest registerRequest){
+        return (userRepository.findByUsername(registerRequest.getUsername()).isPresent() || userRepository.findByEmail(registerRequest.getEmail()).isPresent());
     }
 
     public void verifyAccount(String token) {
