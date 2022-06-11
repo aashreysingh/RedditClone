@@ -1,4 +1,4 @@
-package com.bizarreDomain.RedditClone.dto;
+package com.bizarreDomain.RedditClone.dto.response;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

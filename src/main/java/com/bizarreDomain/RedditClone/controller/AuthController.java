@@ -1,8 +1,8 @@
 package com.bizarreDomain.RedditClone.controller;
 
-import com.bizarreDomain.RedditClone.dto.AuthenticationResponse;
-import com.bizarreDomain.RedditClone.dto.LoginRequest;
-import com.bizarreDomain.RedditClone.dto.RegisterRequest;
+import com.bizarreDomain.RedditClone.dto.request.LoginRequest;
+import com.bizarreDomain.RedditClone.dto.request.RegisterRequest;
+import com.bizarreDomain.RedditClone.dto.response.AuthenticationResponse;
 import com.bizarreDomain.RedditClone.service.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
