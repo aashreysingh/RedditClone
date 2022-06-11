@@ -3,6 +3,7 @@ package com.bizarreDomain.RedditClone.service;
 import com.bizarreDomain.RedditClone.dto.SubredditDTO;
 import com.bizarreDomain.RedditClone.mapper.SubredditMapper;
 import com.bizarreDomain.RedditClone.model.Subreddit;
+import com.bizarreDomain.RedditClone.model.User;
 import com.bizarreDomain.RedditClone.repository.SubredditRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,11 +20,13 @@ public class SubredditService {
 
     private final SubredditRepository subredditRepository;
     private final SubredditMapper subredditMapper;
+    private final AuthService authService;
 
     @Transactional
     public SubredditDTO save(SubredditDTO subredditDTO){
-        Subreddit subreddit = subredditRepository.save(subredditMapper.mapDtoToSubreddit(subredditDTO)); ;
-        subredditDTO.setId(subreddit.getId());
+        User user = authService.getCurrentUser();
+        Subreddit subreddit = subredditRepository.save(subredditMapper.mapDtoToSubreddit(subredditDTO, user)); ;
+        subredditDTO.setSubredditId(subreddit.getSubredditId());
         return subredditDTO;
     }
 

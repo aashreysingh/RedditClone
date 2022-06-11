@@ -3,6 +3,7 @@ package com.bizarreDomain.RedditClone.mapper;
 import com.bizarreDomain.RedditClone.dto.SubredditDTO;
 import com.bizarreDomain.RedditClone.model.Post;
 import com.bizarreDomain.RedditClone.model.Subreddit;
+import com.bizarreDomain.RedditClone.model.User;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -21,5 +22,7 @@ public interface SubredditMapper {
 
     @InheritInverseConfiguration
     @Mapping(target = "posts", ignore = true)
-    Subreddit mapDtoToSubreddit(SubredditDTO subredditDTO);
+    @Mapping(target = "user", source = "user")
+    @Mapping(target = "createdDate", expression = "java(java.time.Instant.now())")
+    Subreddit mapDtoToSubreddit(SubredditDTO subredditDTO, User user);
 }

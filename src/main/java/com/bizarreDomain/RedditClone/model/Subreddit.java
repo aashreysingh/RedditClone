@@ -18,14 +18,15 @@ import java.util.List;
 public class Subreddit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long subredditId;
     @NotBlank(message = "Community name is Required")
     private String name;
     @NotBlank(message = "Description is required")
     private String description;
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "subreddit")
     private List<Post> posts;
     private Instant createdDate;
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId")
     private User user;
 }
