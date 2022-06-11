@@ -4,14 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.time.Instant;
+import java.util.List;
 
 @Data
 @Entity
@@ -32,5 +30,7 @@ public class User {
     private Instant createdDate;
     private Boolean enabled;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<Subreddit> subreddits;
 
 }
