@@ -1,6 +1,7 @@
 package com.bizarreDomain.RedditClone.service;
 
 import com.bizarreDomain.RedditClone.dto.SubredditDTO;
+import com.bizarreDomain.RedditClone.exceptions.SpringRedditException;
 import com.bizarreDomain.RedditClone.mapper.SubredditMapper;
 import com.bizarreDomain.RedditClone.model.Subreddit;
 import com.bizarreDomain.RedditClone.model.User;
@@ -24,6 +25,9 @@ public class SubredditService {
 
     @Transactional
     public SubredditDTO save(SubredditDTO subredditDTO){
+        if(checkIfSubredditNameAlreadyExists(subredditDTO.getName())){
+            throw new SpringRedditException("Subreddit Name already exists. Please try with another Subreddit Name!");
+        }
         User user = authService.getCurrentUser();
         Subreddit subreddit = subredditRepository.save(subredditMapper.mapDtoToSubreddit(subredditDTO, user)); ;
         subredditDTO.setSubredditId(subreddit.getSubredditId());
@@ -39,5 +43,9 @@ public class SubredditService {
 
     public SubredditDTO getSubreddit(Long id){
         return subredditMapper.mapSubredditToDto(subredditRepository.getById(id));
+    }
+
+    public boolean checkIfSubredditNameAlreadyExists(String subredditName){
+        return subredditRepository.findByName(subredditName).isPresent();
     }
 }
