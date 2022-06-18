@@ -59,6 +59,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers("/api/subreddit")
                 .permitAll()
+                .antMatchers("/api/posts")
+                .permitAll()
                 .anyRequest()
                 .authenticated().and()
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
