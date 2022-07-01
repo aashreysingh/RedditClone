@@ -29,9 +29,8 @@ public class SubredditService {
             throw new SpringRedditException("Subreddit Name already exists. Please try with another Subreddit Name!");
         }
         User user = authService.getCurrentUser();
-        Subreddit subreddit = subredditRepository.save(subredditMapper.mapDtoToSubreddit(subredditDTO, user)); ;
-        subredditDTO.setSubredditId(subreddit.getSubredditId());
-        return subredditDTO;
+        Subreddit subreddit = subredditRepository.save(subredditMapper.mapDtoToSubreddit(subredditDTO, user));
+        return subredditMapper.mapSubredditToDto(subreddit);
     }
 
     public List<SubredditDTO> getAllSubreddit(){
