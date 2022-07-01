@@ -63,6 +63,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers("/api/comments")
                 .permitAll()
+                .antMatchers("/api/vote")
+                .permitAll()
                 .anyRequest()
                 .authenticated().and()
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
