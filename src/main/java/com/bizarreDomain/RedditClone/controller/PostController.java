@@ -23,7 +23,7 @@ public class PostController {
                 .body(postService.save(postRequest));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{postId}")
     public ResponseEntity<PostResponse> getPost(@PathVariable Long postId){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(postService.getPost(postId));
