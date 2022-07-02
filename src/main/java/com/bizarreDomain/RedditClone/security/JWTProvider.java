@@ -25,7 +25,7 @@ public class JWTProvider {
         return generateTokenWithUsername(principal.getUsername());
     }
 
-    private String generateTokenWithUsername(String username) {
+    public String generateTokenWithUsername(String username) {
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer("self")
                 .issuedAt(Instant.now())
@@ -34,6 +34,10 @@ public class JWTProvider {
                 .claim("scope", "ROLE_USER")
                 .build();
         return this.jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+    }
+
+    public Long getJwtExpirationInMillis(){
+        return jwtExpirationInMillis;
     }
 
 }
